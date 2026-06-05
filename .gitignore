@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build folders
+dist/
+build/
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+.vite/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Sequelize
+seeders/*.bak
+migrations/*.bak
+
+# Temporary files
+tmp/
+temp/
+
+# Runtime data
+pids/
+*.pid
+*.pid.lock
+
+# SQLite databases
+*.sqlite
+*.sqlite3
+
+# Optional local config
+config/local.js
+
+# Environment-specific files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

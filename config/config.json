@@ -1,0 +1,29 @@
+{ 
+  "development": { 
+    "username": "neondb_owner", 
+    "password": "npg_iVxY1jKUF5ZC", 
+    "database": "neondb", 
+    "host": "ep-delicate-rain-aqa6ov4k-pooler.c-8.us-east-1.aws.neon.tech", 
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }, 
+  "test": { 
+    "userName": "neondb_owner", 
+    "password": "npg_iVxY1jKUF5ZC", 
+    "database": "neondb", 
+    "host": "ep-delicate-rain-aqa6ov4k-pooler.c-8.us-east-1.aws.neon.tech", 
+    "dialect": "postgres" 
+  }, 
+  "production": { 
+    "userName": "neondb_owner",
+    "password": "npg_iVxY1jKUF5ZC",
+    "database": "neondb", 
+    "host": "ep-delicate-rain-aqa6ov4k-pooler.c-8.us-east-1.aws.neon.tech", 
+    "dialect": "postgres" 
+  } 
+}
