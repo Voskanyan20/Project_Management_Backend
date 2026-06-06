@@ -1,17 +1,16 @@
 const routeUser = require('./users');
-const routeStatus = require('./status');
 const routeCategories = require('./categories');
-const routePriority = require('./priority');
-const routeTasks = require('./tasks');
-const routeRole = require('./userRole');
-const routerMiniNotes = require('./miniNotes');
+const routeProducts = require('./products');
+const routerNotes = require('./notes');
+const routerOrders = require('./orders');
+const routerItems = require('./orderItems');
+
 
 module.exports = {
   routeUser,
-  routeStatus,
   routeCategories,
-  routePriority,
-  routeTasks,
-  routeRole,
-  routerMiniNotes
+  routeProducts,
+  routerNotes,
+  routerOrders,
+  routerItems
 }

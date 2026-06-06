@@ -8,46 +8,6 @@ function getUser(req, res) {
         .then((t) => res.json(t)).catch((e) => customError(req, res, e.name));
 }
 
-async function createUser(req, res) {
-    try {
-
-        const {
-            name,
-            email,
-            password,
-            Role,
-        } = req.body;
-
-        await database.seq.transaction(async (transaction) => {
-
-            await database.user.create(
-                {
-                    name,
-                    email,
-                    password,
-                    Role,
-                    created_at: new Date(),
-                },
-                {
-                    transaction: transaction,
-                }
-            );
-
-            res.status(201).json({
-                message: "User created",
-            });
-
-        });
-
-    } catch (e) {
-        console.log(e);
-
-        res.status(500).json({
-            message: e.message,
-        });
-    }
-}
-
 async function signIn(req, res) {
     try {
 
@@ -104,6 +64,5 @@ async function signIn(req, res) {
 
 module.exports = {
   getUser,
-  createUser,
   signIn
 }

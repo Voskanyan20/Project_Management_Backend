@@ -12,6 +12,22 @@ module.exports = {
         password: "Karen123",
         created_at: new Date(),
       },
+      {
+        id: 100001,
+        name: "Artyom",
+        email: "artyom@mail.ru",
+        Role: "User",
+        password: "Artyom123",
+        created_at: new Date(),
+      },
+      {
+        id: 100002,
+        name: "Manuk",
+        email: "manuk@mail.ru",
+        Role: "Admin",
+        password: "Manuk123",
+        created_at: new Date(),
+      },
     ])
   },
 
@@ -21,7 +37,7 @@ module.exports = {
       'user',
       {
         id: {
-          [Op.in]: [100000]
+          [Op.in]: [100000 , 100001 , 100002]
         }
       },
       {}

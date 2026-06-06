@@ -1,17 +1,16 @@
 const user = require("./users");
-const status = require("./status");
 const categories = require("./categories");
-const priority = require("./priority");
-const tasks = require("./tasks");
-const userRole = require("./userRole");
-const miniNotes = require("./miniNotes")
+const products = require("./products");
+const notes = require("./notes");
+const orderItems = require("./orderItems");
+const orders = require("./orders");
+
 
 module.exports = {
   user,
-  status,
   categories,
-  priority,
-  tasks,
-  userRole,
-  miniNotes
+  products,
+  notes,
+  orderItems,
+  orders
 };

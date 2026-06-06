@@ -38,55 +38,38 @@ const database = {}
 database.Sequelize = Sequelize
 database.seq = seq
 database.user = require('../models/users.js')(seq, Sequelize)
-// database.status = require('../models/status.js')(seq, Sequelize)
-// database.priority = require('../models/priority.js')(seq, Sequelize)
-// database.categories = require('../models/categories.js')(seq, Sequelize)
-// database.tasks = require('../models/tasks.js')(seq, Sequelize)
-// database.userRole = require('../models/userRole.js')(seq, Sequelize)
-// database.miniNotes = require('../models/miniNotes.js')(seq, Sequelize)
+database.products = require('../models/products.js')(seq, Sequelize)
+database.categories = require('../models/categories.js')(seq, Sequelize)
+database.notes = require('../models/notes.js')(seq, Sequelize)
+database.orders = require('../models/order.js')(seq, Sequelize)
+database.orderItems = require('../models/orderItem.js')(seq, Sequelize)
 
 
 database.initAssosciacion = () => {
-  
-  // database.user.hasMany(database.tasks, {
-  //   foreignKey: "user_id",
-  // });
 
-  // database.tasks.belongsTo(database.user, {
-  //   foreignKey: "user_id",
-  // });
+  database.categories.hasMany(database.products, {
+  foreignKey: 'category_id'
+  });
 
-  // database.status.hasMany(database.tasks, {
-  //   foreignKey: "status_id",
-  // });
+  database.products.belongsTo(database.categories, {
+    foreignKey: 'category_id'
+  });
 
-  // database.tasks.belongsTo(database.status, {
-  //   foreignKey: "status_id",
-  // });
+  database.orders.hasMany(database.orderItems, {
+    foreignKey: 'order_id'
+  });
 
-  // database.priority.hasMany(database.tasks, {
-  //   foreignKey: "priority_id",
-  // });
+  database.orderItems.belongsTo(database.orders, {
+    foreignKey: 'order_id'
+  });
 
-  // database.tasks.belongsTo(database.priority, {
-  //   foreignKey: "priority_id",
-  // });
+  database.products.hasMany(database.orderItems, {
+    foreignKey: 'product_id'
+  });
 
-  // database.categories.hasMany(database.tasks, {
-  //   foreignKey: "category_id",
-  // });
-
-  // database.tasks.belongsTo(database.categories, {
-  //   foreignKey: "category_id",
-  // });
-
-  // database.tasks.hasMany(database.miniNotes, {
-  //   foreignKey: "task_id",
-  // });
-
-  // database.miniNotes.belongsTo(database.tasks, {
-  //   foreignKey: "task_id",
-  // });
+  database.orderItems.belongsTo(database.products, {
+    foreignKey: 'product_id'
+  });
 }
 
 module.exports = database;

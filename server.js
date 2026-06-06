@@ -32,12 +32,11 @@ app.use(bodyParser.json())
 app.use(
   '/', 
   router.routeUser,
-  // router.routeStatus,
-  // router.routeCategories,
-  // router.routePriority,
-  // router.routeTasks,
-  // router.routeRole,
-  // router.routerMiniNotes
+  router.routeCategories,
+  router.routeProducts,
+  router.routerNotes,
+  router.routerOrders,
+  router.routerItems
 );
 
 app.listen(PORT, () => console.log(`Server started with ${PORT} port`))
