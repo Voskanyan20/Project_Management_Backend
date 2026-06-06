@@ -134,7 +134,11 @@ function deleteProducts(req, res) {
 
 async function getRestockProducts(req, res) {
 
-    const products = await database.products.findAll();
+    const products = await database.products.findAll({
+            include: [
+                database.categories,
+            ]
+        });
 
     res.json(
         products.filter(
