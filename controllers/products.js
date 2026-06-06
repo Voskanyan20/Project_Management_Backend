@@ -132,9 +132,22 @@ function deleteProducts(req, res) {
     })
 }
 
+async function getRestockProducts(req, res) {
+
+    const products = await database.products.findAll();
+
+    res.json(
+        products.filter(
+            p => p.stock_quantity <= p.minimum_stock
+        )
+    );
+
+}
+
 module.exports = {
   getProducts,
   createProducts,
   updateProducts,
-  deleteProducts
+  deleteProducts,
+  getRestockProducts
 }
