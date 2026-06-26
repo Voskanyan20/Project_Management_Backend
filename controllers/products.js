@@ -2,6 +2,11 @@ const database = require('../conf/db_config')
 const { Op } = require('sequelize')
 const customOnError = require('./error')
 
+function normalizeProductType(value) {
+    if (value === 'online') return 'online'
+    return 'local'
+}
+
 function getProducts(req, res) {
     database.products
         .findAll({
@@ -9,7 +14,7 @@ function getProducts(req, res) {
                 database.categories,
             ]
         })
-        .then((t) => res.json(t)).catch((e) => customError(req, res, e.name));
+        .then((t) => res.json(t)).catch((e) => customOnError(req, res, e.name));
 }
 
 async function createProducts(req, res) {
@@ -21,7 +26,8 @@ async function createProducts(req, res) {
             price,
             stock_quantity,
             minimum_stock,
-            category_id
+            category_id,
+            product_type
         } = req.body;
 
         await database.seq.transaction(async (transaction) => {
@@ -34,7 +40,8 @@ async function createProducts(req, res) {
                     price,
                     stock_quantity,
                     minimum_stock,
-                    category_id
+                    category_id,
+                    product_type: normalizeProductType(product_type)
                 },
                 {
                     transaction: transaction,
@@ -65,7 +72,8 @@ async function updateProducts(req, res) {
         price,
         stock_quantity,
         minimum_stock,
-        category_id
+        category_id,
+        product_type
     } = req.body;
 
     const productsId = req.params.id;
@@ -91,6 +99,7 @@ async function updateProducts(req, res) {
                     stock_quantity,
                     minimum_stock,
                     category_id,
+                    product_type: normalizeProductType(product_type),
                     updated_at: new Date()
                 },
                 {

@@ -8,8 +8,11 @@ const http = require('http')
 
 
 database.initAssosciacion()
+const { ensureProductTypeColumn } = require('./utils/ensureSchema')
+
 database.seq
   .sync({ force: false, alter: true })
+  .then(() => ensureProductTypeColumn())
   .then(() => {
     console.log('sync')
   })

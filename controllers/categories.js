@@ -5,7 +5,7 @@ const customOnError = require('./error')
 function getCategories(req, res) {
     database.categories
         .findAll({})
-        .then((t) => res.json(t)).catch((e) => customError(req, res, e.name));
+        .then((t) => res.json(t)).catch((e) => customOnError(req, res, e.name));
 }
 
 async function createCategories(req, res) {

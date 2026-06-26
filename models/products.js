@@ -33,6 +33,11 @@ module.exports = (seq, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 5
+    },
+    product_type: {
+      type: Sequelize.ENUM('online', 'local'),
+      allowNull: false,
+      defaultValue: 'local'
     }
   })
   return products;
