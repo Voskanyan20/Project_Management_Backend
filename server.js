@@ -8,12 +8,13 @@ const http = require('http')
 
 
 database.initAssosciacion()
-const { ensureProductTypeColumn, ensureJsonColumns } = require('./utils/ensureSchema')
+const { ensureProductTypeColumn, ensureJsonColumns, ensureCategoryParentColumn } = require('./utils/ensureSchema')
 
 database.seq
   .sync({ force: false, alter: true })
   .then(() => ensureProductTypeColumn())
   .then(() => ensureJsonColumns())
+  .then(() => ensureCategoryParentColumn())
   .then(() => {
     console.log('sync')
   })

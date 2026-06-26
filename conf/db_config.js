@@ -47,6 +47,16 @@ database.orderItems = require('../models/orderItem.js')(seq, Sequelize)
 
 database.initAssosciacion = () => {
 
+  database.categories.hasMany(database.categories, {
+    as: 'subcategories',
+    foreignKey: 'parent_id',
+  });
+
+  database.categories.belongsTo(database.categories, {
+    as: 'parent',
+    foreignKey: 'parent_id',
+  });
+
   database.categories.hasMany(database.products, {
   foreignKey: 'category_id'
   });

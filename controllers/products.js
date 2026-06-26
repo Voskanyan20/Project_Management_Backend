@@ -39,7 +39,16 @@ function getProducts(req, res) {
     database.products
         .findAll({
             include: [
-                database.categories,
+                {
+                    model: database.categories,
+                    include: [
+                        {
+                            model: database.categories,
+                            as: 'parent',
+                            attributes: ['id', 'name'],
+                        },
+                    ],
+                },
             ]
         })
         .then((t) => res.json(t)).catch((e) => customOnError(req, res, e.name));
@@ -207,7 +216,16 @@ async function getRestockProducts(req, res) {
 
     const products = await database.products.findAll({
             include: [
-                database.categories,
+                {
+                    model: database.categories,
+                    include: [
+                        {
+                            model: database.categories,
+                            as: 'parent',
+                            attributes: ['id', 'name'],
+                        },
+                    ],
+                },
             ]
         });
 

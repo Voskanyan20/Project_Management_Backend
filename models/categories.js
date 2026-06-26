@@ -15,6 +15,10 @@ module.exports = (seq, Sequelize) => {
       type: Sequelize.JSON,
       allowNull: true,
       defaultValue: []
+    },
+    parent_id: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
     }
   }, {
     tableName: "categories",

@@ -58,4 +58,20 @@ async function ensureJsonColumns() {
   }
 }
 
-module.exports = { ensureProductTypeColumn, ensureJsonColumns }
+async function ensureCategoryParentColumn() {
+  const [parentColumn] = await database.seq.query(`
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = 'categories' AND column_name = 'parent_id'
+  `)
+
+  if (parentColumn.length === 0) {
+    await database.seq.query(`
+      ALTER TABLE "categories"
+      ADD COLUMN "parent_id" INTEGER REFERENCES "categories"("id") ON DELETE SET NULL;
+    `)
+    console.log('categories.parent_id column added')
+  }
+}
+
+module.exports = { ensureProductTypeColumn, ensureJsonColumns, ensureCategoryParentColumn }

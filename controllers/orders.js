@@ -9,7 +9,21 @@ function getOrders(req, res) {
                 {
                     model: database.orderItems,
                     include: [
-                        database.products
+                        {
+                            model: database.products,
+                            include: [
+                                {
+                                    model: database.categories,
+                                    include: [
+                                        {
+                                            model: database.categories,
+                                            as: 'parent',
+                                            attributes: ['id', 'name'],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
                     ]
                 }
             ]
