@@ -38,6 +38,11 @@ module.exports = (seq, Sequelize) => {
       type: Sequelize.ENUM('online', 'local'),
       allowNull: false,
       defaultValue: 'local'
+    },
+    option_values: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: {}
     }
   })
   return products;

@@ -28,4 +28,34 @@ async function ensureProductTypeColumn() {
   console.log('product_type column added')
 }
 
-module.exports = { ensureProductTypeColumn }
+async function ensureJsonColumns() {
+  const [categoryOptions] = await database.seq.query(`
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = 'categories' AND column_name = 'options'
+  `)
+
+  if (categoryOptions.length === 0) {
+    await database.seq.query(`
+      ALTER TABLE "categories"
+      ADD COLUMN "options" JSONB DEFAULT '[]'::jsonb;
+    `)
+    console.log('categories.options column added')
+  }
+
+  const [productOptions] = await database.seq.query(`
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name = 'products' AND column_name = 'option_values'
+  `)
+
+  if (productOptions.length === 0) {
+    await database.seq.query(`
+      ALTER TABLE "products"
+      ADD COLUMN "option_values" JSONB DEFAULT '{}'::jsonb;
+    `)
+    console.log('products.option_values column added')
+  }
+}
+
+module.exports = { ensureProductTypeColumn, ensureJsonColumns }

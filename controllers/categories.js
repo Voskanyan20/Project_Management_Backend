@@ -1,6 +1,6 @@
 const database = require('../conf/db_config')
-const { Op } = require('sequelize')
 const customOnError = require('./error')
+const { normalizeOptions } = require('../utils/categoryOptions')
 
 function getCategories(req, res) {
     database.categories
@@ -10,12 +10,15 @@ function getCategories(req, res) {
 
 async function createCategories(req, res) {
     try {
-        const { name } = req.body;
+        const { name, options } = req.body;
 
         await database.seq.transaction(async (transaction) => {
 
             await database.categories.create(
-                { name },
+                {
+                    name,
+                    options: normalizeOptions(options),
+                },
                 {
                     transaction: transaction,
                 }
@@ -38,7 +41,7 @@ async function createCategories(req, res) {
 
 async function updateCategories(req, res) {
 
-    const { name } = req.body;
+    const { name, options } = req.body;
 
     const categoryId = req.params.id;
 
@@ -57,6 +60,7 @@ async function updateCategories(req, res) {
             await database.categories.update(
                 {
                     name,
+                    options: normalizeOptions(options),
                     updated_at: new Date()
                 },
                 {

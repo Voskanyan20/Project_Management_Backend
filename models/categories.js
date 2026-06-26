@@ -10,6 +10,11 @@ module.exports = (seq, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
       unique: false
+    },
+    options: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: []
     }
   }, {
     tableName: "categories",

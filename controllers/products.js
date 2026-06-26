@@ -1,10 +1,38 @@
 const database = require('../conf/db_config')
-const { Op } = require('sequelize')
 const customOnError = require('./error')
+const {
+    validateOptionValues,
+    normalizeOptions,
+} = require('../utils/categoryOptions')
 
 function normalizeProductType(value) {
     if (value === 'online') return 'online'
     return 'local'
+}
+
+async function resolveProductPricing(category, optionValues, fallbackPrice, fallbackCostPrice) {
+    const categoryOptions = normalizeOptions(category?.options)
+
+    if (categoryOptions.length === 0) {
+        return {
+            optionValues: {},
+            price: fallbackPrice,
+            cost_price: fallbackCostPrice,
+        }
+    }
+
+    const validation = validateOptionValues(category.options, optionValues)
+    if (!validation.valid) {
+        const error = new Error(validation.message)
+        error.statusCode = 400
+        throw error
+    }
+
+    return {
+        optionValues: validation.optionValues,
+        price: fallbackPrice,
+        cost_price: fallbackCostPrice,
+    }
 }
 
 function getProducts(req, res) {
@@ -27,21 +55,37 @@ async function createProducts(req, res) {
             stock_quantity,
             minimum_stock,
             category_id,
-            product_type
+            product_type,
+            option_values,
         } = req.body;
 
         await database.seq.transaction(async (transaction) => {
+            const category = await database.categories.findByPk(category_id, { transaction })
+
+            if (!category) {
+                return res.status(400).json({
+                    message: 'Category not found',
+                })
+            }
+
+            const resolved = await resolveProductPricing(
+                category,
+                option_values,
+                price,
+                cost_price
+            )
 
             await database.products.create(
                 {
                     name,
                     description,
-                    cost_price,
-                    price,
+                    cost_price: resolved.cost_price,
+                    price: resolved.price,
                     stock_quantity,
                     minimum_stock,
                     category_id,
-                    product_type: normalizeProductType(product_type)
+                    product_type: normalizeProductType(product_type),
+                    option_values: resolved.optionValues,
                 },
                 {
                     transaction: transaction,
@@ -57,7 +101,7 @@ async function createProducts(req, res) {
     } catch (e) {
         console.log(e);
 
-        res.status(500).json({
+        res.status(e.statusCode || 500).json({
             message: e.message,
         });
     }
@@ -73,7 +117,8 @@ async function updateProducts(req, res) {
         stock_quantity,
         minimum_stock,
         category_id,
-        product_type
+        product_type,
+        option_values,
     } = req.body;
 
     const productsId = req.params.id;
@@ -90,16 +135,33 @@ async function updateProducts(req, res) {
                 });
             }
 
+            const effectiveCategoryId = category_id ?? product.category_id
+            const category = await database.categories.findByPk(effectiveCategoryId, { transaction })
+
+            if (!category) {
+                return res.status(400).json({
+                    message: 'Category not found',
+                })
+            }
+
+            const resolved = await resolveProductPricing(
+                category,
+                option_values ?? product.option_values,
+                price ?? product.price,
+                cost_price ?? product.cost_price
+            )
+
             await database.products.update(
                 {
                     name,
                     description,
-                    cost_price,
-                    price,
+                    cost_price: resolved.cost_price,
+                    price: resolved.price,
                     stock_quantity,
                     minimum_stock,
-                    category_id,
+                    category_id: effectiveCategoryId,
                     product_type: normalizeProductType(product_type),
+                    option_values: resolved.optionValues,
                     updated_at: new Date()
                 },
                 {
@@ -120,7 +182,7 @@ async function updateProducts(req, res) {
 
         console.log(e);
 
-        res.status(500).json({
+        res.status(e.statusCode || 500).json({
             message: e.message
         });
 
