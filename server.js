@@ -31,6 +31,11 @@ const apiLimiter = RateLimit({
 })
 
 app.use(cors())
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ ok: true })
+})
+
 app.use(apiLimiter)
 app.use(bodyParser.json())
 
